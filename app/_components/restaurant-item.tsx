@@ -53,11 +53,12 @@ const RestaurantItem = ({ restaurant, className, userFavoriteRestaurants }: Rest
 
             {/* IMAGEM */}
             <div className="w-full h-[136px] relative">
-               <Link href={`/restaurants/${restaurant.id}`}>
+               <Link href={`/restaurants/${restaurant.id}`} className="absolute inset-0">
                   <Image
                      src={restaurant.imageUrl}
                      alt={restaurant.name}
                      fill
+                     sizes="100%"
                      className="object-cover rounded-md"
                   />
                </Link>

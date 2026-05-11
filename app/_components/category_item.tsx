@@ -16,7 +16,7 @@ const CategoryItem = ({ category }: CategoryItemProps) => {
                   alt={category.name}
                   height={30}
                   width={30}
-                  className="max-h-[25px]"
+                  className="max-h-[25px] w-auto"
                />
                <span className="font-semibold text-sm mr-5">{category.name}</span>
             </div>

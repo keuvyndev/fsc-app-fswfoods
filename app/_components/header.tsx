@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { HeartIcon, HomeIcon, LogInIcon, LogOutIcon, MenuIcon, ScrollTextIcon, XCircleIcon, XIcon, XSquareIcon } from "lucide-react";
+import { HeartIcon, HomeIcon, LogInIcon, LogOutIcon, MenuIcon, ScrollTextIcon } from "lucide-react";
 import Link from "next/link";
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
-import { useEffect, useState } from "react";
 
 const Header = () => {
 
@@ -17,25 +16,8 @@ const Header = () => {
    const handleSignInClick = () => signIn('google');
    const handleSignOutClick = () => signOut();
 
-   const [showMessage, setShowMessage] = useState(false);
-
-
-   useEffect(() => {
-      if (window.innerWidth > 550) {
-         setShowMessage(true);
-      }
-   }, []);
-
    return (
       <>
-         {showMessage && (
-            <div className="bg-primary p-2 text-sm w-full flex justify-center">
-               <button onClick={() => setShowMessage(false)} className="flex items-center gap-2 text-center text-white hover:text-red-900">
-                  <XCircleIcon size={15} />
-                  <span>Para uma experiência otimizada, recomendamos o uso de um smartphone.</span>
-               </button>
-            </div>
-         )}
          <div className="flex justify-between pt-6 px-5">
             <Link href="/">
                <div className="relative h-[30px] w-[100px]">

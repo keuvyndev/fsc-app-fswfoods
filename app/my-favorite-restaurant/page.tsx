@@ -6,44 +6,49 @@ import Header from "../_components/header";
 import RestaurantItem from "../_components/restaurant-item";
 
 const myFavoriteRestaurants = async () => {
+  const session = await getServerSession(authOptions);
 
-   const session = await getServerSession(authOptions)
+  if (!session) {
+    return notFound();
+  }
 
-   if (!session) {
-      return notFound();
-   }
+  const userFavoriteRestaurants = await db.userFavoriteRestaurant.findMany({
+    where: {
+      userId: session.user.id,
+    },
+    include: {
+      restaurant: true,
+    },
+  });
 
-   const userFavoriteRestaurants = await db.userFavoriteRestaurant.findMany({
-      where: {
-         userId: session.user.id,
-      },
-      include: {
-         restaurant: true
-      }
-   })
+  const serializedOrders = JSON.parse(
+    JSON.stringify(userFavoriteRestaurants),
+  ) as typeof userFavoriteRestaurants;
 
-   return (
-      <>
-         <Header />
-         <div className="py-6 px-5">
-            <h2 className="mb-6 font-semibold text-lg">Restaurantes Favoritos</h2>
-            <div className="flex flex-col gap-6 w-full">
-               {userFavoriteRestaurants.length > 0 ? (
-                  userFavoriteRestaurants.map(({ restaurant }) => (
-                     <RestaurantItem
-                        key={restaurant.id}
-                        restaurant={JSON.parse(JSON.stringify(restaurant))}
-                        className="min-w-full max-w-full"
-                        userFavoriteRestaurants={userFavoriteRestaurants}
-                     />
-                  ))) : (
-                  <h3 className="font-medium">Você ainda não marcou nenhum restaurante como favorito.</h3>
-               )
-               }
-            </div>
-         </div>
-      </>
-   );
-}
+  return (
+    <>
+      <Header />
+      <div className="px-5 py-6">
+        <h2 className="mb-6 text-lg font-semibold">Restaurantes Favoritos</h2>
+        <div className="flex w-full flex-col gap-6">
+          {serializedOrders.length > 0 ? (
+            serializedOrders.map(({ restaurant }) => (
+              <RestaurantItem
+                key={restaurant.id}
+                restaurant={JSON.parse(JSON.stringify(restaurant))}
+                className="min-w-full max-w-full"
+                userFavoriteRestaurants={serializedOrders}
+              />
+            ))
+          ) : (
+            <h3 className="font-medium">
+              Você ainda não marcou nenhum restaurante como favorito.
+            </h3>
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default myFavoriteRestaurants;
